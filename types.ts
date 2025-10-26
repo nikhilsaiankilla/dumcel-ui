@@ -7,6 +7,7 @@ export interface ProjectType {
     createdAt: string,
     updatedAt?: string,
     latestState?: DeploymentState,
+    favicon? : string,
     deployment: {
         latestDeploymentId?: string,
         state?: DeploymentState,

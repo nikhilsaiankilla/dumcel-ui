@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ProjectsTab from "@/components/projects-tab"
 import DeploymentTab from "@/components/DeploymentTab"
 import { CreateProjectForm } from "@/components/create-project-form"
+import { ChangePasswordForm } from "@/components/change-password"
 
 const Page = () => {
   const router = useRouter()
@@ -80,9 +81,7 @@ const Page = () => {
           </TabsContent>
 
           <TabsContent value="Settings">
-            <div className="text-sm text-muted-foreground">
-              Change your password here.
-            </div>
+            <ChangePasswordForm />
           </TabsContent>
         </div>
       </Tabs>

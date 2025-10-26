@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { RefreshCcwIcon } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 import { Button } from './ui/button'
 
 interface BuildLogsContainerProps {
@@ -103,11 +103,22 @@ const BuildLogsContainer: React.FC<BuildLogsContainerProps> = ({ deploymentId })
                         <span className="text-blue-400 animate-pulse">Fetching...</span>
                     )}
                     <Button
-                        disabled={isLoading}
-                        className='p-2 border-[0.5px] border-gray-300/30 bg-gray-400/10 rounded-sm cursor-pointer'
                         onClick={refreshLogs}
+                        disabled={isLoading}
+                        variant="outline"
+                        size="icon"
+                        className={clsx(
+                            'border border-gray-700 bg-gray-800/60 hover:bg-gray-700/60 text-gray-200 transition',
+                            'disabled:opacity-50 disabled:cursor-not-allowed'
+                        )}
                     >
-                        <RefreshCcwIcon className={clsx(isLoading && "animate-spin")} size={12} />
+                        <RefreshCw
+                            size={16}
+                            className={clsx(
+                                'text-gray-200',
+                                isLoading && 'animate-spin text-gray-500'
+                            )}
+                        />
                     </Button>
                 </div>
             </div>

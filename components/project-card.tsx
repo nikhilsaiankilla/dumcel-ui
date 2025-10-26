@@ -56,7 +56,7 @@ const ProjectCard = ({ project, onDelete }: { project: ProjectType, onDelete: (i
             <div className='w-full flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
                     <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage src={project?.favicon ? project?.favicon : "https://github.com/shadcn.png"} />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col space-y-1'>
@@ -66,26 +66,10 @@ const ProjectCard = ({ project, onDelete }: { project: ProjectType, onDelete: (i
                 </div>
 
                 <div className='flex items-center justify-center gap-1'>
-                    <CustomBadge variant='state' type={project?.latestState || "not started"} className="capitalize"/>
-                    <span className='p-1 rounded-lg hover:bg-gray-300/20 transition-all duration-150 ease-in-out'>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <EllipsisIcon size={18}/>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align='end'>
-                                <DropdownMenuLabel onClick={deleteProject} className='cursor-pointer flex items-center gap-2 hover:text-red-500 capitalize duration-150 ease-in-out text-sm'>
-                                    {loading  ? <Loader size={14} className='animate-spin'/> : <Trash size={12}/>} Delete Project
-                                </DropdownMenuLabel>
-                                {/* <DropdownMenuSeparator />
-                                <DropdownMenuItem>Profile</DropdownMenuItem>
-                                <DropdownMenuItem>Billing</DropdownMenuItem>
-                                <DropdownMenuItem>Team</DropdownMenuItem>
-                                <DropdownMenuItem>Subscription</DropdownMenuItem> */}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </span>
+                    <CustomBadge variant='state' type={project?.latestState || "not started"} className="capitalize" />
                 </div>
             </div>
+
 
             <div className='w-fit pl-1.5 pr-3 py-0.5 rounded-full gap-2 flex items-center justify-center bg-gray-700/50'>
                 <span className='p-1.5 bg-black/50 rounded-full'>
@@ -114,12 +98,27 @@ const ProjectCard = ({ project, onDelete }: { project: ProjectType, onDelete: (i
                 </h3>
             </div>
 
-            <div className='flex items-center gap-2 flex-wrap'>
+            <div className='flex items-center justify-between gap-2 flex-wrap'>
                 <Link href={`/dashboard/project/${project._id}`}>
                     <Button variant={'outline'} className='flex items-center gap-2.5 cursor-pointer disabled:bg-gray-300/20' disabled={loading}>
                         Open Project <ArrowRightCircle />
                     </Button>
                 </Link>
+                <Button
+                    variant="outline"
+                    disabled={loading}
+                    onClick={deleteProject}
+                    className="group flex items-center gap-2.5 cursor-pointer disabled:bg-gray-300/20 hover:border-red-600 transition-all duration-150 ease-in-out"
+                >
+                    {loading ? (
+                        <Loader size={14} className="animate-spin text-red-500" />
+                    ) : (
+                        <Trash
+                            size={12}
+                            className="text-gray-400 group-hover:text-red-500 transition-all duration-150 ease-in-out"
+                        />
+                    )}
+                </Button>
             </div>
         </div>
     )

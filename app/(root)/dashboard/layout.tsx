@@ -7,6 +7,7 @@ import { Coins, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton"; // 👈 make sure this exists
 
 interface User {
     _id: string;
@@ -15,14 +16,12 @@ interface User {
     avatar?: string;
     credits: number;
     isGitConnected: boolean;
-    // add any other fields you need
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
     const [githubLoading, setGithubLoading] = useState(false);
     const [githubError, setGithubError] = useState<string | null>(null);
 
@@ -43,14 +42,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             });
 
             if (!res.ok) {
-                const text = await res.text();
-                throw new Error(`Failed to fetch user data (${res.status}): ${text}`);
+                const text = await res.json();
+                throw new Error(`${text.error}`);
             }
 
             const json = await res.json();
-            if (!json.success) {
-                throw new Error(json.message || "Failed to fetch user data");
-            }
+            if (!json.success) throw new Error(json.message || "Failed to fetch user data");
 
             setUser(json.data);
         } catch (err: unknown) {
@@ -65,29 +62,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         fetchData();
     }, []);
 
-    /**
-     * Redirect user to GitHub for repo access authorization
-     */
     const connectToGithub = async (): Promise<void> => {
         setGithubLoading(true);
         setGithubError(null);
 
         try {
             const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-
             if (!clientId) throw new Error("GitHub Client ID is not defined");
 
             const redirectUri = `http://localhost:3000/api/github/callback`;
             const scope = "repo";
-
-            // Use token as state to verify identity on callback
             const state = "repo";
 
             const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
                 redirectUri
             )}&scope=${scope}&state=${state}`;
 
-            // Redirect user to GitHub OAuth page
             window.location.href = authUrl;
         } catch (err: unknown) {
             console.error("GitHub connection error:", err);
@@ -106,35 +96,62 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </Link>
 
                 <div className="flex gap-3 items-center">
-                    {!user?.isGitConnected ? (
-                        <Button
-                            variant={"outline"}
-                            className="cursor-pointer px-3 py-1"
-                            onClick={connectToGithub}
-                            disabled={githubLoading}
-                        >
-                            {githubLoading ? "Connecting..." : "Connect to GitHub"}
-                        </Button>
+                    {loading ? (
+                        <>
+                            <Skeleton className="h-8 w-28 rounded-md" />
+                            <Skeleton className="h-8 w-12 rounded-md" />
+                            <Skeleton className="h-8 w-8 rounded-full" />
+                        </>
                     ) : (
-                        <Button className="px-3 py-1 flex items-center gap-2 disabled:opacity-100 cursor-not-allowed" variant={'outline'} disabled>
-                            <Github size={12} />
-                            Connected
-                        </Button>
+                        <>
+                            {!user?.isGitConnected ? (
+                                <Button
+                                    variant="outline"
+                                    className="cursor-pointer px-3 py-1"
+                                    onClick={connectToGithub}
+                                    disabled={githubLoading}
+                                >
+                                    {githubLoading ? "Connecting..." : "Connect to GitHub"}
+                                </Button>
+                            ) : (
+                                <Button
+                                    className="px-3 py-1 flex items-center gap-2 disabled:opacity-100 cursor-not-allowed"
+                                    variant="outline"
+                                    disabled
+                                >
+                                    <Github size={12} />
+                                    Connected
+                                </Button>
+                            )}
+
+                            {user && (
+                                <Badge
+                                    variant="outline"
+                                    className="flex items-center gap-1 px-3 py-2 rounded space-x-2.5"
+                                >
+                                    <Coins className="text-amber-400" size={15} />
+                                    <span>{user.credits}</span>
+                                </Badge>
+                            )}
+
+                            <ProfileDropdown user={user} loading={loading} error={error} />
+                        </>
                     )}
-                    {user && (
-                        <Badge variant={'outline'} className="flex items-center gap-1 px-3 py-2 rounded space-x-2.5">
-                            <Coins className="text-amber-400" size={15} />
-                            <span>{user.credits}</span>
-                        </Badge>
-                    )}
-                    <ProfileDropdown user={user} loading={loading} error={error} />
                 </div>
             </nav>
 
-            <div className="w-full max-w-7xl mx-auto mt-5 px-5">
-                {loading && <p>Loading...</p>}
-                {error && <p className="text-red-500">{error}</p>}
-                {!loading && !error && children}
+            <div className="w-full max-w-7xl mx-auto mt-5 px-5 min-h-[60vh] flex items-center justify-center">
+                {loading ? (
+                    <div className="w-full space-y-4">
+                        <Skeleton className="h-6 w-1/3 mx-auto" />
+                        <Skeleton className="h-4 w-1/2 mx-auto" />
+                        <Skeleton className="h-64 w-full rounded-lg" />
+                    </div>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
+                ) : (
+                    children
+                )}
             </div>
         </section>
     );

@@ -1,6 +1,7 @@
 import BuildLogsContainer from '@/components/build-logs-container';
 import CustomBadge from '@/components/custom-badge';
 import DeployProjectForm from '@/components/DeployProjectForm';
+import ProjectPreview from '@/components/project-preview';
 import { Button } from '@/components/ui/button';
 import { ProjectType } from '@/types';
 import { BrickWall, ExternalLink, Github, Pencil, TrendingUp } from 'lucide-react';
@@ -118,74 +119,52 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                             Visit Analytics
                         </Button>
                     </Link>
+                    <div className='flex items-center gap-3 flex-wrap'>
+                        <Link href={`/dashboard/project/${project._id}/deployments`}>
+                            <Button
+                                variant='outline'
+                                className='px-3 py-2 rounded-lg text-sm font-semibold border-gray-500/40 hover:bg-gray-100/10 transition-colors'
+                            >
+                                All Deployments
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
             </div>
 
-            <div className='w-full p-3 rounded-md bg-gray-100/5 border border-gray-300/20 grid grid-cols-1 md:grid-cols-2'>
-                <div className='w-full aspect-square rounded-lg overflow-hidden border border-gray-300/20'>
-                    <Image
-                        alt='Preview'
-                        width={100}
-                        unoptimized
-                        height={100}
-                        className='w-full h-full object-cover transition-transform duration-300 hover:scale-[1.02]'
-                        src={'https://placehold.co/600x400?text=Preview'}
-                    />
+            <div
+                className={"w-full rounded-xl border border-white/10 bg-gray-100/5 p-4 md:p-6 grid grid-cols-1 md:grid-cols-5 gap-6"}
+            >
+                {/* Preview Image */}
+                <div className='relative aspect-video w-full rounded-lg overflow-hidden border border-white/10 md:col-span-2'>
+                    <ProjectPreview subDomain={project.subDomain}/>
                 </div>
 
-                <div className='w-full py-10 px-6 space-y-6'>
+                {/* Info Section */}
+                <div className='w-full space-y-6 md:col-span-3 flex flex-col justify-center'>
                     {/* Deployment */}
-                    <div className='space-y-1.5'>
-                        <h5 className='text-xs capitalize tracking-wide text-gray-400 font-normal'>
-                            Deployment
-                        </h5>
+                    <div className='space-y-1'>
+                        <h5 className='text-xs uppercase tracking-wider text-gray-400'>Deployment</h5>
                         <Link
-                            href={`http://${project?.subDomain}.localhost:8001`}
+                            href={project ? `http://${project.subDomain}.localhost:8001` : "#"}
                             target='_blank'
-                            className='text-base text-white font-medium hover:text-gray-200 flex items-center gap-2 transition-colors'
+                            className='text-base font-medium text-white hover:text-gray-300 flex items-center gap-2'
                         >
-                            {`http://${project?.subDomain}.localhost:8001`}
+                            {project?.subDomain}.localhost:8001
                             <ExternalLink size={14} className='opacity-70' />
                         </Link>
                     </div>
 
                     {/* Status */}
-                    <div className='space-y-1.5'>
-                        <h5 className='text-xs capitalize tracking-wide text-gray-400 font-normal'>
-                            Status
-                        </h5>
-                        <CustomBadge
-                            variant="state"   // tells the badge to use state-based styling
-                            type={state}      // passes the actual state value
-                            className="capitalize"
-                        />
+                    <div className='space-y-1'>
+                        <h5 className='text-xs uppercase tracking-wider text-gray-400'>Status</h5>
+                        <CustomBadge variant='state' type={state} className='capitalize' />
                     </div>
 
-                    {/* Created On */}
-                    <div className='space-y-1.5'>
-                        <h5 className='text-xs capitalize tracking-wide text-gray-400 font-normal'>
-                            Last Updated On
-                        </h5>
-                        <p className='text-sm text-gray-100 font-medium'>
-                            {project?.updatedAt
-                                ? new Date(project?.updatedAt).toLocaleString('en-US', {
-                                    dateStyle: 'medium',
-                                    timeStyle: 'short',
-                                })
-                                : ''}
-                        </p>
-                    </div>
-
-                    {/* Button */}
-                    <div className='flex items-center gap-5 flex-wrap'>
-                        <Link href={`/dashboard/project/${project._id}/deployments`}>
-                            <Button
-                                variant='outline'
-                                className='cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold border-gray-500/40 hover:bg-gray-100/10 transition-colors'
-                            >
-                                All Deployments
-                            </Button>
-                        </Link>
+                    {/* Last Updated */}
+                    <div className='space-y-1'>
+                        <h5 className='text-xs uppercase tracking-wider text-gray-400'>Last Updated</h5>
+                        <p className='text-sm text-gray-200 font-medium'>{project?.updatedAt}</p>
                     </div>
                 </div>
             </div>
