@@ -50,12 +50,8 @@ export default function Home() {
               </h3>
 
               <div className="w-full flex flex-col md:flex-row items-center justify-center gap-4">
-                <Link href='/' className="px-6 py-2 bg-white rounded-full text-black font-semibold flex items-center gap-2 group transition-all duration-150 ease-in-out text-sm hover:bg-gray-200">
+                <Link href='/login' className="px-6 py-2 bg-white rounded-full text-black font-semibold flex items-center gap-2 group transition-all duration-150 ease-in-out text-sm hover:bg-gray-200">
                   <span className="text-sm">▲</span> Start Deploying
-                </Link>
-
-                <Link href='/' className="px-6 py-2 bg-black/50 backdrop-blur-sm border border-white/10 rounded-full text-white font-semibold flex items-center gap-2 transition-all duration-150 ease-in-out text-sm hover:bg-black/70">
-                  Get a Demo
                 </Link>
               </div>
             </div>
@@ -194,7 +190,6 @@ export default function Home() {
           </Link>
         </section>
       </main>
-
       <Footer />
     </>
   )

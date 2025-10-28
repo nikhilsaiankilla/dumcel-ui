@@ -129,7 +129,7 @@ const ProjectPage = () => {
                         </Button>
                     </Link>
                     <div className="flex items-center gap-3 flex-wrap">
-                        <Link href={`/dashboard/project/deployments?id=${project._id}`}>
+                        <Link href={`/dashboard/project/${project._id}/deployments`}>
                             <Button
                                 variant="outline"
                                 className="px-3 py-2 rounded-lg text-sm font-semibold border-gray-500/40 hover:bg-gray-100/10 transition-colors"
