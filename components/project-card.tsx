@@ -53,10 +53,10 @@ const ProjectCard = ({ project, onDelete }: { project: ProjectType, onDelete: (i
             className={`p-4 relative space-y-3 border-[0.5px] transition-all duration-200 ease-in-out bg-background/5 rounded-md shadow-sm
                 ${loading ? 'border-red-500/40' : 'border-gray-300/20 hover:border-gray-300/55'}`}
         >
-            <div className='w-full flex items-center justify-between'>
+            <div className='w-full flex items-center justify-between flex-wrap gap-3'>
                 <div className='flex items-center gap-3'>
                     <Avatar>
-                        <AvatarImage src={project?.favicon ? project?.favicon : "https://github.com/shadcn.png"} />
+                        <AvatarImage src={project?.favicon ? project?.favicon : "/logo.png"} />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col space-y-1'>
@@ -64,7 +64,6 @@ const ProjectCard = ({ project, onDelete }: { project: ProjectType, onDelete: (i
                         <Link href={project.subDomain + ".localhost:3000"} target='_blank' className="text-sm text-muted-foreground">{project.subDomain + ".localhost:3000"}</Link>
                     </div>
                 </div>
-
                 <div className='flex items-center justify-center gap-1'>
                     <CustomBadge variant='state' type={project?.latestState || "not started"} className="capitalize" />
                 </div>

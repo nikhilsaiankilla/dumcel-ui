@@ -13,7 +13,7 @@ const AddProjectBtn = () => {
         border-gray-300/20 hover:border-gray-300/55
         bg-background/5 hover:bg-background/10
         transition-all duration-200 ease-in-out
-        min-h-[11rem] cursor-pointer min-w-xs w-full
+        min-h-[11rem] cursor-pointer w-full
         max-w-sm
       "
         >

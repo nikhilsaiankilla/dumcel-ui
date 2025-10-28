@@ -75,14 +75,6 @@ const ProjectPage = () => {
     }
 
     const state = project.deployment?.state || "not started";
-    const bgClassMap: Record<string, string> = {
-        "not started": "bg-gray-800 ring-gray-500",
-        queued: "bg-blue-500 ring-blue-500",
-        "in progress": "bg-yellow-500 ring-yellow-500",
-        ready: "bg-green-500 ring-green-500",
-        failed: "bg-red-500 ring-red-500",
-    };
-    const bgClass = bgClassMap[state] || "bg-gray-600";
 
     return (
         <div className="w-full max-w-5xl mx-auto p-5 bg-background">

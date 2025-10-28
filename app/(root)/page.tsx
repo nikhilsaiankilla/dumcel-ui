@@ -4,14 +4,12 @@ import { CoinsIcon, Globe, Merge, TrendingUp } from "lucide-react"
 import Footer from "@/components/Footer"
 import DeployButtonMicrointeraction from '@/components/DeployButtonMicrointeraction'
 import { LineChartLandingPage } from "@/components/LineChartLandingPage"
+import { CreditCalculatorCard } from "@/components/credit-calculator"
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="bg-background border-b border-t border-gray-300/20 text-center py-3 text-white text-sm break-words">
-        Im Working on this project, stay tuned for updates!
-      </div>
       <main className="w-full min-h-screen scroll-smooth relative bg-background">
         {/* Hero Section */}
         <section className="w-full relative max-w-7xl mx-auto h-screen border-[0.5px] border-gray-300/20 overflow-hidden">
@@ -63,8 +61,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full max-w-7xl mx-auto border-[0.5px] border-gray-300/20 overflow-hidden py-20 text-center">
-          <h1 className="text-xl md:text-4xl font-normal text-white mx-5">
+        <section className="w-full max-w-7xl mx-auto border-[0.5px] border-gray-300/20 overflow-hidden py-20 text-center px-4">
+          <h1 className="text-xl md:text-4xl font-normal text-white px-4 md:px-10">
             Develop with your favorite React Applications {">_"}
           </h1>
 
@@ -77,12 +75,12 @@ export default function Home() {
         </section>
 
         <section className="w-full max-w-7xl mx-auto border-[0.5px] border-gray-300/20 overflow-hidden text-center grid grid-cols-1 md:grid-cols-2">
-          <div className="border-[0.5px] border-gray-300/20 h-full w-full md:p-10">
-            <h1 className="text-lg font-normal text-gray-500 text-left px-10 pt-10 md:p-0">
+          <div className="border-[0.5px] border-gray-300/20 h-full w-full px-4 md:p-10">
+            <h1 className="text-lg font-normal text-gray-500 text-left px-4 pt-10 md:p-0">
               {">_"} One Click Deployments
             </h1>
 
-            <p className="text-white text-base md:text-lg leading-relaxed text-left mt-5 px-10 md:p-0">
+            <p className="text-white text-base md:text-lg leading-relaxed text-left mt-5 px-4 md:p-0">
               Deploy your React applications instantly with a single click.
               We handle the builds, scaling, and delivery so you can focus on building.
             </p>
@@ -95,10 +93,10 @@ export default function Home() {
 
           <div className="border-[0.5px] border-gray-300/20 h-full w-full md:p-10 rounded-lg flex items-start justify-between flex-col">
             <div>
-              <h1 className="text-lg font-normal text-gray-500 text-left px-10 pt-10 md:p-0">
+              <h1 className="text-lg font-normal text-gray-500 text-left px-4 pt-10 md:p-0">
                 {">_"} Deployment & Credits
               </h1>
-              <p className="text-white text-base md:text-lg leading-relaxed text-left mt-5 px-10 md:p-0">
+              <p className="text-white text-base md:text-lg leading-relaxed text-left mt-5 px-4 md:p-0">
                 First login? You get <span className="font-semibold text-green-400">10 free credits</span> to deploy your React applications instantly. Buy more credits anytime and deploy with a single click. Build, scale, and launch your apps effortlessly.
               </p>
             </div>
@@ -111,7 +109,7 @@ export default function Home() {
               <CoinsIcon size={200} className="text-amber-400 relative z-10" />
             </div>
 
-            <div className="w-full space-y-10">
+            <div className="w-full space-y-10 px-4 pb-4">
               <div className="w-full flex items-center justify-center md:mt-10">
                 <div className="w-full flex flex-col md:flex-row items-center justify-center gap-4">
                   <Link href='/' className="px-6 py-2 bg-white rounded-full text-black font-semibold flex items-center gap-2 group transition-all duration-150 ease-in-out text-sm hover:bg-gray-200">
@@ -129,10 +127,13 @@ export default function Home() {
               </p>
             </div>
           </div>
-
         </section>
 
-        <section className="w-full max-w-7xl mx-auto border-[0.5px] border-t-0 border-gray-300/20 overflow-hidden py-10 px-10">
+        <section className="w-full max-w-7xl mx-auto border-l-[0.5px] border-r-[0.5px] border-b-[0.5px] border-gray-300/20 py-10 flex items-center justify-center">
+          <CreditCalculatorCard />
+        </section>
+
+        <section className="w-full max-w-7xl mx-auto border-[0.5px] border-t-0 border-gray-300/20 overflow-hidden py-10 px-4 md:px-10">
           <h1 className="text-lg font-normal text-gray-500 text-left flex items-center gap-5">
             <TrendingUp /> Analytics
           </h1>
@@ -161,7 +162,6 @@ export default function Home() {
             <span className="rotate-90">▲</span> View Portfolio
           </Link>
         </section>
-
       </main>
 
       <Footer />
