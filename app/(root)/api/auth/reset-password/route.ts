@@ -56,8 +56,6 @@ export async function POST(req: NextRequest) {
         res.cookies.set("passwordResetAllowed", "", { maxAge: 0, path: "/" });
         res.cookies.set("otpVerified", "", { maxAge: 0, path: "/" });
 
-        // TODO: send confirmation email
-
         return res;
     } catch (error) {
         console.error("Reset password error:", error);

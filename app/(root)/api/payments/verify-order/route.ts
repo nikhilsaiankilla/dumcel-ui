@@ -5,6 +5,8 @@ import { UserModel } from "@/models/user.model";
 import { CreditTransactionModel } from "@/models/creditTransaction.model";
 import { connectDb } from "@/utils/connectDb";
 import { authenticate } from "@/lib/auth";
+import { sendMail } from "@/lib/mail";
+import { creditPurchaseTemplate } from "@/lib/template";
 
 const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET
 
@@ -74,6 +76,22 @@ export async function POST(request: NextRequest) {
             balanceAfter: user?.credits,
         });
 
+        try {
+            if (user?.email) {
+                await sendMail({
+                    to: user?.email,
+                    subject: "Credits Purchase Successful - Dumcel Cloud",
+                    html: creditPurchaseTemplate({
+                        userName: user?.name || "User",
+                        dashboardUrl: "https://dumcel.nikhilsaiankilla.blog/dashboard",
+                        credits: credits,
+                        amount: amount,
+                    }),
+                });
+            }
+        } catch (error) {
+            console.error("Error sending credit purchase email:", error);
+        }
         return NextResponse.json({
             success: true,
             message: "Payment verified successfully",

@@ -3,6 +3,8 @@ import { UserModel } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { generateOTP } from "@/lib/utils"; // adjust import path
+import { sendMail } from "@/lib/mail";
+import { resetPasswordTemplate } from "@/lib/template";
 
 export async function POST(req: NextRequest) {
     try {
@@ -37,7 +39,15 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, error: "Failed to store OTP" }, { status: 500 });
         }
 
-        // TODO: send OTP via email
+        // send OTP via email
+        await sendMail({
+            to: email,
+            subject: "Reset Your Password - Dumcel",
+            html: resetPasswordTemplate({
+                userName: existingUser.name,
+                otp: otp,
+            }),
+        });
 
         // Create response first
         const response = NextResponse.json(

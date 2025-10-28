@@ -4,12 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import bcrypt from "bcryptjs";
 import { connectDb } from "@/utils/connectDb";
+import { sendMail } from "@/lib/mail";
+import { welcomeTemplate } from "@/lib/template";
 
 export async function POST(req: NextRequest) {
     try {
         await connectDb();
         console.log('inside the db');
-        
+
         const schema = z.object({
             name: z.string().min(3, "Name must be at least 3 characters"),
             email: z.string().email(),
@@ -55,6 +57,17 @@ export async function POST(req: NextRequest) {
         });
 
         // TODO: Trigger Kafka queue if needed
+        const html = welcomeTemplate({ userName: newUser.name, dashboardUrl: "https://dumcel.nikhilsaiankilla.blog" })
+
+        try {
+            await sendMail({
+                to: newUser.email,
+                subject: "Welcome to Dumcel Cloud 🚀",
+                html: html,
+            });
+        } catch (error) {
+            // dont do anything
+        }
 
         return NextResponse.json(
             {

@@ -2,6 +2,8 @@ import { CreditTransactionModel } from "@/models/creditTransaction.model";
 import { UserModel } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { welcomeTemplate } from "@/lib/template";
+import { sendMail } from "@/lib/mail";
 
 export async function GET(req: NextRequest) {
     try {
@@ -77,6 +79,19 @@ export async function GET(req: NextRequest) {
                 reason: "Welcome bonus for joining via GitHub",
                 balanceAfter: user.credits,
             });
+
+            // TODO: Trigger Kafka queue if needed
+            const html = welcomeTemplate({ userName: user.name, dashboardUrl: "https://dumcel.nikhilsaiankilla.blog" })
+
+            try {
+                await sendMail({
+                    to: user.email,
+                    subject: "Welcome to Dumcel Cloud",
+                    html: html,
+                });
+            } catch (error) {
+                // dont do anything
+            }
         } else if (!user.githubId) {
             user.githubId = ghUser.id;
             await user.save();

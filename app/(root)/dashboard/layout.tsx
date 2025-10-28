@@ -70,7 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
             if (!clientId) throw new Error("GitHub Client ID is not defined");
 
-            const redirectUri = `http://localhost:3000/api/github/callback`;
+            const redirectUri = process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI!;
             const scope = "repo";
             const state = "repo";
 

@@ -47,7 +47,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user }) => {
             });
 
             const json = await res.json();
-            
+
             if (res.ok) {
                 localStorage.removeItem('token')
                 router.push("/");
@@ -100,6 +100,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user }) => {
                         {user?.email ?? "email"}
                     </p>
                     <DropdownMenuSeparator />
+
+                    <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+                        Dashboard
+                    </DropdownMenuItem>
 
                     <DropdownMenuItem onClick={() => router.push("/dashboard/credits")}>
                         Buy Credits

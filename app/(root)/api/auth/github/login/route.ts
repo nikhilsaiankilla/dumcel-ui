@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
             );
         }
 
-        const redirectUri = "http://localhost:3000/connecting";
+        const redirectUri = process.env.GITHUB_OAUTH_REDIRECT_URI;
         const scope = "repo,user:email";
 
         const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=${scope}`;

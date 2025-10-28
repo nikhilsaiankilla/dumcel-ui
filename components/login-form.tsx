@@ -73,8 +73,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
   const loginWithGithub = () => {
     setGithubLoading(true)
-    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID
-    const redirectUri = `http://localhost:3000/api/github/callback`
+    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID!
+    const redirectUri = process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI!
     const scope = "read:user,user:email"
     const state = "login"
 
