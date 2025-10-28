@@ -91,7 +91,6 @@ const ProjectPage = () => {
                             className="cursor-pointer flex items-center gap-2 px-2 py-1.5"
                         >
                             <Github size={16} />
-                            Repository
                         </Button>
                     </Link>
 
@@ -119,7 +118,7 @@ const ProjectPage = () => {
                             Build Logs
                         </Button>
                     </Link>
-                    <Link href={`/dashboard/analytics?id=${id}`}>
+                    <Link href={`/dashboard/analytics/${project._id}`}>
                         <Button
                             variant={"outline"}
                             className="cursor-pointer flex items-center gap-2 px-2 py-1.5"
