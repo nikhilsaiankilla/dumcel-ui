@@ -23,8 +23,8 @@ const Navbar = () => {
     // Array of action buttons
     const actionLinks: { href: string; label: string; variant: "outline" | "default" | "link" | "destructive" | "secondary" | "ghost" }[] = [
         { href: "/login", label: "Log In", variant: "outline" },
-        // { href: "/signup", label: "Contact", variant: "outline" },
         { href: "/signup", label: "Sign up", variant: "default" },
+        { href: "https://nikhilsaiankilla.blog", label: "Meet the Developer", variant: "outline" },
     ];
 
     const fetchData = async (token: string) => {
