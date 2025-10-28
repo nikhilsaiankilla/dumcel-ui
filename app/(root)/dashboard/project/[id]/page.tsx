@@ -1,102 +1,110 @@
-import BuildLogsContainer from '@/components/build-logs-container';
-import CustomBadge from '@/components/custom-badge';
-import DeployProjectForm from '@/components/DeployProjectForm';
-import ProjectPreview from '@/components/project-preview';
-import { Button } from '@/components/ui/button';
-import { ProjectType } from '@/types';
-import { BrickWall, ExternalLink, Github, Pencil, TrendingUp } from 'lucide-react';
-import { cookies } from 'next/headers';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react'
+"use client";
 
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
-    const id = (await params).id;
-    const cookiesStore = await cookies();
-    const token = cookiesStore.get('token')?.value;
+import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import BuildLogsContainer from "@/components/build-logs-container";
+import CustomBadge from "@/components/custom-badge";
+import DeployProjectForm from "@/components/DeployProjectForm";
+import ProjectPreview from "@/components/project-preview";
+import { Button } from "@/components/ui/button";
+import { ProjectType } from "@/types";
+import { BrickWall, ExternalLink, Github, TrendingUp } from "lucide-react";
+import Link from "next/link";
 
-    if (!token) {
-        return (
-            <div className="p-10 text-center text-red-400">
-                Unauthenticated — please log in.
-            </div>
-        );
-    }
+const ProjectPage = () => {
+    const searchParams = usePathname();
+    const id = searchParams.split("/").pop();
 
-    let project: ProjectType | null = null;
-    let error: string | null = null;
+    const [project, setProject] = useState<ProjectType | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
-    try {
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-        const cookieHeader = cookiesStore.get('token')?.value
-            ? `token=${cookiesStore.get('token')?.value}`
-            : '';
+    useEffect(() => {
+        const fetchProject = async () => {
+            if (!id) {
+                setError("Project ID missing from URL.");
+                setLoading(false);
+                return;
+            }
 
-        const res = await fetch(`${baseUrl}/api/project/get-project/${id}`, {
-            method: 'GET',
-            headers: {
-                Cookie: cookieHeader,
-                'Content-Type': 'application/json',
-            },
-            cache: 'no-store',
-        });
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setError("Unauthenticated please log in.");
+                setLoading(false);
+                return;
+            }
 
-        // const res = await fetch(`http://localhost:3000/api/project/get-project/${id}`, {
-        //     method: 'GET',
-        //     headers: {
-        //         Authorization: `Bearer ${token}`,
-        //         'Content-Type': 'application/json',
-        //     },
-        // });
+            try {
+                const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-        if (!res.ok) throw new Error(`Failed to fetch project (${res.status})`);
+                const res = await fetch(`/api/project/get-project/${id}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
 
-        const json = await res.json();
+                if (!res.ok) throw new Error(`Failed to fetch project (${res.status})`);
 
-        if (!json.success) throw new Error(json.error || 'Unexpected error');
+                const json = await res.json();
+                if (!json.success) throw new Error(json.error || "Unexpected error");
 
-        project = json?.data;
-    } catch (err: unknown) {
-        console.log(err);
+                setProject(json.data);
+            } catch (err: unknown) {
+                console.error(err);
+                setError(err instanceof Error ? err.message : "Something went wrong.");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        error = err instanceof Error ? err.message : 'Something went wrong.';
+        fetchProject();
+    }, [id]);
+
+    if (loading) {
+        return <div className="p-10 text-center text-gray-400">Loading project...</div>;
     }
 
     if (error || !project) {
         return (
             <div className="p-10 text-center text-red-400">
-                {error || 'Project not found.'}
+                {error || "Project not found."}
             </div>
         );
     }
 
-    // Map state colors
-    const state = project.deployment?.state || 'not started'; // Replace with real state if available
+    const state = project.deployment?.state || "not started";
     const bgClassMap: Record<string, string> = {
-        'not started': 'bg-gray-800 ring-gray-500',
-        queued: 'bg-blue-500 ring-blue-500',
-        'in progress': 'bg-yellow-500 ring-yellow-500',
-        ready: 'bg-green-500 ring-green-500',
-        failed: 'bg-red-500 ring-red-500',
+        "not started": "bg-gray-800 ring-gray-500",
+        queued: "bg-blue-500 ring-blue-500",
+        "in progress": "bg-yellow-500 ring-yellow-500",
+        ready: "bg-green-500 ring-green-500",
+        failed: "bg-red-500 ring-red-500",
     };
-    const bgClass = bgClassMap[state] || 'bg-gray-600';
+    const bgClass = bgClassMap[state] || "bg-gray-600";
 
     return (
-        <div className='w-full max-w-5xl mx-auto p-5 bg-background'>
+        <div className="w-full max-w-5xl mx-auto p-5 bg-background">
+            {/* Header */}
+            <div className="w-full py-6 flex items-start md:items-center justify-between flex-col lg:flex-row gap-5">
+                <h1 className="text-lg md:text-2xl font-semibold leading-normal capitalize">
+                    {project?.projectName}
+                </h1>
 
-            <div className='w-full py-6 flex items-start md:items-center justify-between flex-col lg:flex-row gap-5'>
-                <h1 className='text-lg md:text-2xl font-semibold leading-normal capitalize'>{project?.projectName}</h1>
-
-                <div className='flex items-center gap-4 flex-wrap'>
-                    <Link href={project?.gitUrl || ""} target='_blank'>
-                        <Button variant={'outline'} className='cursor-pointer flex items-center gap-2 px-2 py-1.5'>
+                <div className="flex items-center gap-4 flex-wrap">
+                    <Link href={project?.gitUrl || ""} target="_blank">
+                        <Button
+                            variant={"outline"}
+                            className="cursor-pointer flex items-center gap-2 px-2 py-1.5"
+                        >
                             <Github size={16} />
                             Repository
                         </Button>
                     </Link>
 
-                    <Link href={`http://${project?.subDomain}.localhost:8001`} target='_blank'>
-                        <Button className='cursor-pointer flex items-center gap-2 px-2 py-0.5'>
+                    <Link href={`http://${project?.subDomain}.localhost:8001`} target="_blank">
+                        <Button className="cursor-pointer flex items-center gap-2 px-2 py-0.5">
                             <ExternalLink size={14} />
                             Live
                         </Button>
@@ -104,26 +112,35 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 </div>
             </div>
 
-            <div className='w-full py-5 flex items-center justify-between gap-4 flex-wrap'>
-                <h1 className='text-lg md:text-2xl font-semibold leading-normal capitalize'>Production Deployment</h1>
+            {/* Deployment Header */}
+            <div className="w-full py-5 flex items-center justify-between gap-4 flex-wrap">
+                <h1 className="text-lg md:text-2xl font-semibold leading-normal capitalize">
+                    Production Deployment
+                </h1>
                 <div className="flex items-center gap-2 flex-wrap">
                     <Link href={"#build-logs"}>
-                        <Button variant={'outline'} className='cursor-pointer flex items-center gap-2 px-2 py-1.5'>
+                        <Button
+                            variant={"outline"}
+                            className="cursor-pointer flex items-center gap-2 px-2 py-1.5"
+                        >
                             <BrickWall size={16} />
                             Build Logs
                         </Button>
                     </Link>
-                    <Link href={`/dashboard/analytics/${id}`} >
-                        <Button variant={'outline'} className='cursor-pointer flex items-center gap-2 px-2 py-1.5'>
+                    <Link href={`/dashboard/analytics?id=${id}`}>
+                        <Button
+                            variant={"outline"}
+                            className="cursor-pointer flex items-center gap-2 px-2 py-1.5"
+                        >
                             <TrendingUp size={16} />
                             Visit Analytics
                         </Button>
                     </Link>
-                    <div className='flex items-center gap-3 flex-wrap'>
-                        <Link href={`/dashboard/project/${project._id}/deployments`}>
+                    <div className="flex items-center gap-3 flex-wrap">
+                        <Link href={`/dashboard/project/deployments?id=${project._id}`}>
                             <Button
-                                variant='outline'
-                                className='px-3 py-2 rounded-lg text-sm font-semibold border-gray-500/40 hover:bg-gray-100/10 transition-colors'
+                                variant="outline"
+                                className="px-3 py-2 rounded-lg text-sm font-semibold border-gray-500/40 hover:bg-gray-100/10 transition-colors"
                             >
                                 All Deployments
                             </Button>
@@ -132,57 +149,58 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 </div>
             </div>
 
-            <div
-                className={"w-full rounded-xl border border-white/10 bg-gray-100/5 p-4 md:p-6 grid grid-cols-1 md:grid-cols-5 gap-6"}
-            >
-                {/* Preview Image */}
-                <div className='relative aspect-video w-full rounded-lg overflow-hidden border border-white/10 md:col-span-2'>
-                    <ProjectPreview subDomain={project.subDomain}/>
+            {/* Info Card */}
+            <div className="w-full rounded-xl border border-white/10 bg-gray-100/5 p-4 md:p-6 grid grid-cols-1 md:grid-cols-5 gap-6">
+                <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-white/10 md:col-span-2">
+                    <ProjectPreview subDomain={project.subDomain} />
                 </div>
 
-                {/* Info Section */}
-                <div className='w-full space-y-6 md:col-span-3 flex flex-col justify-center'>
-                    {/* Deployment */}
-                    <div className='space-y-1'>
-                        <h5 className='text-xs uppercase tracking-wider text-gray-400'>Deployment</h5>
+                <div className="w-full space-y-6 md:col-span-3 flex flex-col justify-center">
+                    <div className="space-y-1">
+                        <h5 className="text-xs uppercase tracking-wider text-gray-400">Deployment</h5>
                         <Link
                             href={project ? `http://${project.subDomain}.localhost:8001` : "#"}
-                            target='_blank'
-                            className='text-base font-medium text-white hover:text-gray-300 flex items-center gap-2'
+                            target="_blank"
+                            className="text-base font-medium text-white hover:text-gray-300 flex items-center gap-2"
                         >
                             {project?.subDomain}.localhost:8001
-                            <ExternalLink size={14} className='opacity-70' />
+                            <ExternalLink size={14} className="opacity-70" />
                         </Link>
                     </div>
 
-                    {/* Status */}
-                    <div className='space-y-1'>
-                        <h5 className='text-xs uppercase tracking-wider text-gray-400'>Status</h5>
-                        <CustomBadge variant='state' type={state} className='capitalize' />
+                    <div className="space-y-1">
+                        <h5 className="text-xs uppercase tracking-wider text-gray-400">Status</h5>
+                        <CustomBadge variant="state" type={state} className="capitalize" />
                     </div>
 
-                    {/* Last Updated */}
-                    <div className='space-y-1'>
-                        <h5 className='text-xs uppercase tracking-wider text-gray-400'>Last Updated</h5>
-                        <p className='text-sm text-gray-200 font-medium'>{project?.updatedAt}</p>
+                    <div className="space-y-1">
+                        <h5 className="text-xs uppercase tracking-wider text-gray-400">Last Updated</h5>
+                        <p className="text-sm text-gray-200 font-medium">{project?.updatedAt}</p>
                     </div>
                 </div>
             </div>
 
-            <div className='w-full mt-2 space-y-3.5 bg-gray-100/5 rounded-md border border-gray-300/20 p-3'>
-                <DeployProjectForm projectId={id} />
+            {/* Deploy Form */}
+            <div className="w-full mt-2 space-y-3.5 bg-gray-100/5 rounded-md border border-gray-300/20 p-3">
+                <DeployProjectForm projectId={id!} />
             </div>
 
-            <div className='w-full mt-2 space-y-3.5 bg-gray-100/5 rounded-md border border-gray-300/20 p-3'>
-                <div className='w-full'>
-                    <h1 className='text-lg md:text-2xl font-semibold leading-normal capitalize'>Latest Build Logs</h1>
+            {/* Logs */}
+            <div
+                id="build-logs"
+                className="w-full mt-2 space-y-3.5 bg-gray-100/5 rounded-md border border-gray-300/20 p-3"
+            >
+                <div className="w-full">
+                    <h1 className="text-lg md:text-2xl font-semibold leading-normal capitalize">
+                        Latest Build Logs
+                    </h1>
                 </div>
                 {project?.deployment?.latestDeploymentId ? (
                     <BuildLogsContainer deploymentId={project.deployment?.latestDeploymentId} />
                 ) : null}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default page
+export default ProjectPage;
