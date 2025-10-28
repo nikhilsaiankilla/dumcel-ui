@@ -167,7 +167,11 @@ const ProjectPage = () => {
 
                     <div className="space-y-1">
                         <h5 className="text-xs uppercase tracking-wider text-gray-400">Last Updated</h5>
-                        <p className="text-sm text-gray-200 font-medium">{project?.updatedAt}</p>
+                        <p className="text-sm text-gray-200 font-medium">{project?.updatedAt && new Date(project.updatedAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                        })}</p>
                     </div>
                 </div>
             </div>

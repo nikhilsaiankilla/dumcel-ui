@@ -1,10 +1,11 @@
 import Navbar from "@/components/Navbar"
 import Link from "next/link"
-import { CoinsIcon, Globe, Merge, TrendingUp } from "lucide-react"
+import { CoinsIcon, Globe, Merge, MergeIcon, TrendingUp } from "lucide-react"
 import Footer from "@/components/Footer"
 import DeployButtonMicrointeraction from '@/components/DeployButtonMicrointeraction'
 import { LineChartLandingPage } from "@/components/LineChartLandingPage"
 import { CreditCalculatorCard } from "@/components/credit-calculator"
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -73,6 +74,35 @@ export default function Home() {
             <Merge size={24} />
           </div>
         </section>
+
+        {/* Framework Support Section */}
+        <section className="w-full max-w-7xl mx-auto border-[0.5px] border-gray-300/20 overflow-hidden py-20 text-center px-4 bg-gradient-to-b from-black/10 to-black/30">
+          <h1 className="text-xl md:text-3xl font-semibold text-white mb-4 flex items-center mx-auto w-fit gap-3">
+            <MergeIcon /> We Support React & Vue
+          </h1>
+          <p className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto">
+            Deploy your <span className="text-blue-400 font-medium">React</span> and <span className="text-green-400 font-medium">Vue</span> applications seamlessly on Dumcel.
+            No extra setup just connect your repo and hit deploy.
+          </p>
+
+          <div className="flex items-center justify-center gap-6 mt-10">
+            <Image
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+              alt="React Logo"
+              width={100}
+              height={100}
+              className="w-20 h-20 animate-spin-slow"
+            />
+            <Image
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg"
+              alt="Vue Logo"
+              width={100}
+              height={100}
+              className="w-20 h-20"
+            />
+          </div>
+        </section>
+
 
         <section className="w-full max-w-7xl mx-auto border-[0.5px] border-gray-300/20 overflow-hidden text-center grid grid-cols-1 md:grid-cols-2">
           <div className="border-[0.5px] border-gray-300/20 h-full w-full px-4 md:p-10">

@@ -152,4 +152,18 @@
     -webkit-text-fill-color: theme('colors.white') !important;
     caret-color: theme('colors.white');
   }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 10s linear infinite;
+  }
 }
