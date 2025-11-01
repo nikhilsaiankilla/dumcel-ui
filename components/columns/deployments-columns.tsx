@@ -46,7 +46,7 @@ export const DeploymentColumns: ColumnDef<DeploymentType>[] = [
         header: "Domain",
         cell: ({ row }) => {
             const subDomain: string = row.getValue('subDomain');
-            return <Link href={`https://${subDomain}.localhost:8001`} target="_blank" className='flex items-center gap-2 text-gray-300/60 hover:text-white transition-all duration-150 ease-in-out'>
+            return <Link href={`https://${subDomain}.d.nikhilsaiankilla.blog/`} target="_blank" className='flex items-center gap-2 text-gray-300/60 hover:text-white transition-all duration-150 ease-in-out'>
                 View Project<ExternalLink size={14} />
             </Link>
         }

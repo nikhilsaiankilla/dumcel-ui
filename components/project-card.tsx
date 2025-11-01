@@ -61,7 +61,7 @@ const ProjectCard = ({ project, onDelete }: { project: ProjectType, onDelete: (i
                     </Avatar>
                     <div className='flex flex-col space-y-1'>
                         <h3 className="font-semibold text-sm">{project.projectName}</h3>
-                        <Link href={project.subDomain + ".localhost:3000"} target='_blank' className="text-sm text-muted-foreground">{project.subDomain + ".localhost:3000"}</Link>
+                        <Link href={`https://${project.subDomain}.d.nikhilsaiankilla.blog/`} target='_blank' className="text-sm text-muted-foreground">{`https://${project.subDomain}.d.nikhilsaiankilla.blog/`}</Link>
                     </div>
                 </div>
                 <div className='flex items-center justify-center gap-1'>
@@ -119,7 +119,7 @@ const ProjectCard = ({ project, onDelete }: { project: ProjectType, onDelete: (i
                     )}
                 </Button>
             </div>
-        </div>
+        </div >
     )
 }
 

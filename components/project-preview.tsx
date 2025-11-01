@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export default function ProjectPreview({ subDomain }: { subDomain: string }) {
     const baseUrl = `https://api.microlink.io/?url=`;
     const mainUrl = `${baseUrl}${encodeURIComponent(
-        `http://${subDomain}.localhost:8001`
+        `https://${subDomain}.d.nikhilsaiankilla.blog/`
     )}&screenshot=true&meta=false&embed=screenshot.url`;
 
     const fallbackUrl = `${baseUrl}${encodeURIComponent(
