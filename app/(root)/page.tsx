@@ -6,6 +6,7 @@ import DeployButtonMicrointeraction from '@/components/DeployButtonMicrointeract
 import { LineChartLandingPage } from "@/components/LineChartLandingPage"
 import { CreditCalculatorCard } from "@/components/credit-calculator"
 import Image from "next/image"
+import NoticeCard from '@/components/notice-card'
 
 export default function Home() {
   return (
@@ -190,6 +191,7 @@ export default function Home() {
           </Link>
         </section>
       </main>
+      <NoticeCard />
       <Footer />
     </>
   )
