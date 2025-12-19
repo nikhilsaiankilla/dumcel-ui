@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { RefreshCw } from 'lucide-react'
+import { Captions, FileWarning, RefreshCw } from 'lucide-react'
 import { Button } from './ui/button'
 
 interface BuildLogsContainerProps {
@@ -124,7 +124,7 @@ const BuildLogsContainer: React.FC<BuildLogsContainerProps> = ({ deploymentId })
             </div>
 
             <div className="flex-1 overflow-y-auto p-3 space-y-1.5 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                {error && <div className="text-red-500 text-sm">Error: {error}</div>}
+                {/* {error && <div className="text-red-500 text-sm">Error: {error}</div>}
                 {isLoading && !error && <div className="text-gray-400 text-sm">Loading logs...</div>}
 
                 {logs.map((logItem, index) => (
@@ -149,7 +149,14 @@ const BuildLogsContainer: React.FC<BuildLogsContainerProps> = ({ deploymentId })
                         </div>
                     </div>
                 ))}
-                <div ref={logsEndRef}></div>
+                <div ref={logsEndRef}></div> */}
+                <div className='w-full max-w-md rounded-sm border border-amber-300/50 bg-amber-300/10 py-2 px-3 mx-auto'>
+                    <strong className='text-sm font-bold flex items-center gap-2'><Captions /> Notice</strong>
+                    <p className='text-xs font-normal mt-3'>
+                        Due to server cost constraints, real-time logs are temporarily disabled.
+                        Kafka processing has been paused.
+                    </p>
+                </div>
             </div>
         </div>
     )

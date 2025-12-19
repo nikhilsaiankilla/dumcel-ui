@@ -150,11 +150,11 @@ const ProjectPage = () => {
                     <div className="space-y-1">
                         <h5 className="text-xs uppercase tracking-wider text-gray-400">Deployment</h5>
                         <Link
-                            href={project ? `http://${project.subDomain}.localhost:8001` : "#"}
+                            href={project ? `https://${project.subDomain}.nikhilsaiankilla.blog` : "#"}
                             target="_blank"
                             className="text-base font-medium text-white hover:text-gray-300 flex items-center gap-2"
                         >
-                            {project?.subDomain}.localhost:8001
+                            {project?.subDomain}.nikhilsaiankilla.blog
                             <ExternalLink size={14} className="opacity-70" />
                         </Link>
                     </div>

@@ -18,7 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { getCountryCode, getLast30Days } from '@/lib/utils';
 import Image from 'next/image';
-import { Globe } from 'lucide-react';
+import { Captions, Globe } from 'lucide-react';
 
 // Chart config
 const barChartConfig = {
@@ -81,14 +81,19 @@ const AnalyticsPage = ({ id, token }: { id: string; token: string }) => {
             }
         };
 
-        fetchAnalytics();
+        // fetchAnalytics();
     }, [id, token]);
-
-    console.log(analytics);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="text-red-500">Error: {error}</div>;
-    if (!analytics) return <div>No analytics data available.</div>;
+    if (!analytics) return <div className='w-full max-w-md rounded-sm border border-amber-300/50 bg-amber-300/10 py-2 px-3 mx-auto'>
+        <strong className='text-sm font-bold flex items-center gap-2'><Captions /> Notice</strong>
+        <p className='text-xs font-normal mt-3'>
+            Due to server cost constraints, analytics are temporarily disabled.
+            Kafka and clickhouse processing has been paused.
+        </p>
+    </div>
+    // <div>No analytics data available.</div>;
 
     // Helper to render the Top Referrers list
     const renderTopReferrers = () => (
@@ -131,7 +136,7 @@ const AnalyticsPage = ({ id, token }: { id: string; token: string }) => {
                                         />
                                     </>
                                 ) : (
-                                    <span className="text-muted-foreground"><Globe size={14}/></span>
+                                    <span className="text-muted-foreground"><Globe size={14} /></span>
                                 )}
                                 <span className="text-sm font-medium truncate">{countryName}</span>
                             </div>
