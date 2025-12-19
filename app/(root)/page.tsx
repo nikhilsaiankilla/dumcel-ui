@@ -182,7 +182,7 @@ export default function Home() {
             Feel free to refer me or invite me for an interview!
           </p>
           <Link
-            href="https://nikhilsaiankilla.blog"
+            href="https://nikhilsai.in"
             target="_blank"
             className="px-6 py-2 bg-white w-fit rounded-full text-black font-semibold flex items-center gap-2 group transition-all duration-150 ease-in-out text-sm hover:bg-gray-200 mx-auto"
           >
