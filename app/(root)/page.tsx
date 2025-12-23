@@ -14,7 +14,7 @@ export default function Home() {
       <Navbar />
       <main className="w-full min-h-screen scroll-smooth relative bg-background">
         {/* Hero Section */}
-        <section className="w-full relative max-w-7xl mx-auto h-screen border-[0.5px] border-gray-300/20 overflow-hidden">
+        <section className="w-full relative max-w-7xl mx-auto border-[0.5px] h-screen border-gray-300/20 overflow-hidden">
           {/* 1. Gradient Background: Apply a linear gradient from left (green/teal), center (purple/blue), to right (orange/red). 
       2. Grid Overlay: Use a background image property to create the grid lines. 
          - The `repeating-linear-gradient` creates the vertical and horizontal lines.

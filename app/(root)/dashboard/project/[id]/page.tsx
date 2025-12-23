@@ -94,7 +94,7 @@ const ProjectPage = () => {
                         </Button>
                     </Link>
 
-                    <Link href={`http://${project?.subDomain}.localhost:8001`} target="_blank">
+                    <Link href={`https://${project.subDomain}.nikhilsaiankilla.blog/`} target="_blank">
                         <Button className="cursor-pointer flex items-center gap-2 px-2 py-0.5">
                             <ExternalLink size={14} />
                             Live
